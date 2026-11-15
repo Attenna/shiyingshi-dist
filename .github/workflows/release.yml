@@ -1,0 +1,51 @@
+name: 组装交付物
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  assemble:
+    name: 组装（Windows）
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Godot 4.5.1 mono 与导出模板
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Invoke-WebRequest -Uri "https://github.com/godotengine/godot/releases/download/4.5.1-stable/Godot_v4.5.1-stable_mono_win64.zip" -OutFile godot.zip
+          Expand-Archive godot.zip -DestinationPath tools
+          Invoke-WebRequest -Uri "https://github.com/godotengine/godot/releases/download/4.5.1-stable/Godot_v4.5.1-stable_mono_export_templates.tpz" -OutFile templates.zip
+          Expand-Archive templates.zip -DestinationPath tpl
+          $dest = Join-Path $env:APPDATA "Godot\export_templates\4.5.1.stable.mono"
+          New-Item -ItemType Directory -Force -Path $dest | Out-Null
+          Copy-Item "tpl\templates\*" $dest -Recurse -Force
+          Get-ChildItem $dest | Select-Object -First 3 -ExpandProperty Name
+
+      - name: 组装交付物
+        shell: pwsh
+        run: |
+          $godot = (Get-ChildItem tools -Recurse -Filter "*console.exe" | Select-Object -First 1).FullName
+          ./scripts/assemble.ps1 -Godot $godot
+
+      - name: 验证交付结构
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "dist/演播室2.exe")) { throw "缺少 exe" }
+          if (-not (Test-Path "dist/演播室2.pck")) { throw "缺少 pck" }
+          $mods = Get-ChildItem dist/mods -Directory
+          if ($mods.Count -lt 4) { throw "插件数量不足: $($mods.Count)" }
+          Write-Host "插件: $($mods.Name -join ', ')"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shiyingshi-dist
+          path: dist/
+          if-no-files-found: error

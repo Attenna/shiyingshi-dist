@@ -1,0 +1,47 @@
+{
+    "schema_version": 1,
+    "core": {
+        "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
+        "ref": "main",
+        "subdir": "."
+    },
+    "plugins": [
+        {
+            "id": "control_panel_base",
+            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
+            "ref": "main",
+            "subdir": "plugins/control_panel_base",
+            "enabled": true
+        },
+        {
+            "id": "main_vision",
+            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
+            "ref": "main",
+            "subdir": "plugins/main_vision",
+            "enabled": true
+        },
+        {
+            "id": "scene_manager_panel",
+            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
+            "ref": "main",
+            "subdir": "plugins/scene_manager_panel",
+            "enabled": true
+        },
+        {
+            "id": "streaming_arena",
+            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
+            "ref": "main",
+            "subdir": "plugins/streaming_arena",
+            "enabled": true
+        },
+        {
+            "id": "player_database",
+            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
+            "ref": "main",
+            "subdir": "plugins/player_database",
+            "enabled": false,
+            "note": "源码尚未纳入仓库；提交后置 enabled=true，交付变为 5 个插件"
+        }
+    ],
+    "output": "dist"
+}
