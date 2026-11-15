@@ -36,11 +36,10 @@
         },
         {
             "id": "player_database",
-            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
-            "ref": "main",
-            "subdir": "plugins/player_database",
-            "enabled": false,
-            "note": "源码尚未纳入仓库；提交后置 enabled=true，交付变为 5 个插件"
+            "repo": "https://github.com/Attenna/shiyingshi-plugin-player-database.git",
+            "ref": "v1.0.0",
+            "subdir": ".",
+            "enabled": true
         }
     ],
     "output": "dist"
