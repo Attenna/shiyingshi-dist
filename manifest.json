@@ -8,9 +8,9 @@
     "plugins": [
         {
             "id": "control_panel_base",
-            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
-            "ref": "main",
-            "subdir": "plugins/control_panel_base",
+            "repo": "https://github.com/Attenna/shiyingshi-plugin-control-panel-base.git",
+            "ref": "v1.0.0",
+            "subdir": ".",
             "enabled": true
         },
         {
