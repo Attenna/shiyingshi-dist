@@ -9,11 +9,22 @@ dist/
 └── mods/
     ├── control_panel_base/
     ├── main_vision/
+    ├── player_database/
     ├── scene_manager_panel/
     └── streaming_arena/
 ```
 
-交付结构与拆分前一致；`mods/` 是运行时的插件根目录（源码目录名为 `plugins/`）。
+交付结构与拆分前一致；`mods/` 是运行时的插件根目录，插件源码在各自独立仓库。
+
+## 插件仓库
+
+| 插件 | 仓库 | tag |
+|---|---|---|
+| `control_panel_base` | `shiyingshi-plugin-control-panel-base` | `v1.0.0` |
+| `main_vision` | `shiyingshi-plugin-main-vision` | `v1.0.0` |
+| `player_database` | `shiyingshi-plugin-player-database` | `v1.0.0` |
+| `scene_manager_panel` | `shiyingshi-plugin-scene-manager-panel` | `v1.0.0` |
+| `streaming_arena` | `shiyingshi-plugin-streaming-arena` | `v1.0.0` |
 
 ## 用法
 
@@ -46,8 +57,8 @@ GODOT_BIN=/path/to/godot ./scripts/assemble.sh
 
 - `ref` 可以是分支、tag 或 commit；
 - `enabled: false` 的条目会被跳过并打印提示；
-- **阶段 3 过渡**：插件暂时指向 core 仓库的 `plugins/<id>` 子目录；阶段 4 起改为各插件独立仓库 + tag；
-- `player_database` 目前为 `enabled: false`：其源码尚未纳入仓库，待提交后启用（交付会变成 5 个插件）。
+- 插件条目指向各自独立仓库 + tag（`subdir: "."` 表示仓库根目录即插件目录）；
+- `core` 指向内核仓库，只包含 `core/`、`src/` 与文档，不再携带插件源码。
 
 ## CI
 
