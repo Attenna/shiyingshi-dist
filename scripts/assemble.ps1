@@ -34,12 +34,13 @@ function Invoke-Native {
         if ($Quiet) {
             & $File @Arguments 2>&1 | Out-Null
         } else {
-            & $File @Arguments
+            & $File @Arguments 2>&1 | ForEach-Object { Write-Host $_ }
         }
-        return $LASTEXITCODE
+        $code = $LASTEXITCODE
     } finally {
         $ErrorActionPreference = $old
     }
+    return $code
 }
 
 function Invoke-Git {
