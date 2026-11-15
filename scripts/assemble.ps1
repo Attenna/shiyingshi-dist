@@ -26,17 +26,33 @@ $Work = [IO.Path]::GetFullPath($Work)
 if (-not (Test-Path $Manifest)) { throw "找不到 manifest: $Manifest" }
 $config = Get-Content $Manifest -Raw -Encoding UTF8 | ConvertFrom-Json
 
+function Invoke-Native {
+    param([string]$File, [string[]]$Arguments, [switch]$Quiet)
+    $old = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        if ($Quiet) {
+            & $File @Arguments 2>&1 | Out-Null
+        } else {
+            & $File @Arguments
+        }
+        return $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $old
+    }
+}
+
 function Invoke-Git {
     param([string[]]$Arguments)
-    & git @Arguments
-    if ($LASTEXITCODE -ne 0) { throw "git 失败（$LASTEXITCODE）: git $($Arguments -join ' ')" }
+    $code = Invoke-Native git $Arguments -Quiet
+    if ($code -ne 0) { throw "git 失败（$code）: git $($Arguments -join ' ')" }
 }
 
 function Get-Checkout {
     param([string]$Repo, [string]$Ref, [string]$Dest)
     if (Test-Path $Dest) { Remove-Item -LiteralPath $Dest -Recurse -Force }
-    & git clone --quiet --depth 1 --branch $Ref $Repo $Dest 2>$null
-    if ($LASTEXITCODE -eq 0) { return }
+    $code = Invoke-Native git @('clone', '--quiet', '--depth', '1', '--branch', $Ref, $Repo, $Dest) -Quiet
+    if ($code -eq 0) { return }
     if (Test-Path $Dest) { Remove-Item -LiteralPath $Dest -Recurse -Force }
     Write-Host "  ref 不是分支/tag，回退到 commit 检出: $Ref"
     Invoke-Git @('clone', '--quiet', '--depth', '1', $Repo, $Dest)
@@ -97,11 +113,11 @@ if (-not $SkipExport) {
         throw "未找到 Godot 可执行文件：请用 -Godot 指定（或设置 GODOT_BIN）"
     }
     Write-Host "导入 core 资源（生成类缓存）..."
-    & $Godot --headless --path $coreDir --import | Out-Null
+    Invoke-Native $Godot @('--headless', '--path', $coreDir, '--import') -Quiet | Out-Null
     $exe = Join-Path $Output '演播室2.exe'
     Write-Host "导出 Windows Desktop: $exe"
-    & $Godot --headless --path $coreDir --export-release 'Windows Desktop' $exe
-    if ($LASTEXITCODE -ne 0) { throw "导出失败（退出码 $LASTEXITCODE）" }
+    $code = Invoke-Native $Godot @('--headless', '--path', $coreDir, '--export-release', 'Windows Desktop', $exe)
+    if ($code -ne 0) { throw "导出失败（退出码 $code）" }
     if (-not (Test-Path $exe)) { throw "导出后缺少 exe: $exe" }
     $pck = [IO.Path]::ChangeExtension($exe, '.pck')
     if (-not (Test-Path $pck)) { throw "导出后缺少 pck: $pck" }

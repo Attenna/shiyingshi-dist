@@ -15,9 +15,9 @@
         },
         {
             "id": "main_vision",
-            "repo": "https://github.com/Attenna/Arknights-Theurgy-Cup-Like-Streaming-Assistant.git",
-            "ref": "main",
-            "subdir": "plugins/main_vision",
+            "repo": "https://github.com/Attenna/shiyingshi-plugin-main-vision.git",
+            "ref": "v1.0.0",
+            "subdir": ".",
             "enabled": true
         },
         {
