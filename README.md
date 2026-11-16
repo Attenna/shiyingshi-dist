@@ -8,6 +8,7 @@ dist/
 ├── 演播室2.pck
 └── mods/
     ├── control_panel_base/
+    ├── life_game/
     ├── main_vision/
     ├── player_database/
     ├── scene_manager_panel/
@@ -21,6 +22,7 @@ dist/
 | 插件 | 仓库 | tag |
 |---|---|---|
 | `control_panel_base` | `shiyingshi-plugin-control-panel-base` | `v1.0.0` |
+| `life_game` | `shiyingshi-plugin-life-game` | `v1.0.0` |
 | `main_vision` | `shiyingshi-plugin-main-vision` | `v1.0.0` |
 | `player_database` | `shiyingshi-plugin-player-database` | `v1.0.0` |
 | `scene_manager_panel` | `shiyingshi-plugin-scene-manager-panel` | `v1.0.0` |
